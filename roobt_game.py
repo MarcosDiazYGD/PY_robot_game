@@ -67,7 +67,6 @@ cards = {
     'cure': MagicCard('cure', 10, 'recover 10 defense points in the chosen part'),  # recupera defensa
     'critic_attack': MagicCard('critic_attack', 30, 'deals 30 damage without spending energy'),  # ataque sin gastar energia
     'short_circuit': MagicCard('short_circuit', 5, 'reduces energy by 5 points for 3 rounds'),  # efecto por 3 rondas
-    'poison': MagicCard('poison', 3, 'reduces defense by 3 points for 3 rounds'),  # efecto por 3 rondas
     'invulnerable': MagicCard('invulnerable', True, 'is immune to any rival attack for 1 round'),  # inmuidad al daño por 1 turno
     'turn_jump': MagicCard('turn_jump', 2, "skip the opponent's next turn") #salta el turno del rival
 }
@@ -82,7 +81,6 @@ class Robot:
         self.get_random_cards()
         self.is_short_circuit = False
         self.is_invulnerable = False
-        self.is_poisoned = False
         self.parts = [
             Part('Head', attack_level=5, defense_level=20, energy_consumption=5),
 
@@ -149,9 +147,6 @@ class Robot:
 
     def short_circuit(self, hability):
         self.energy -= hability
-
-    def poison(self, hability):
-        pass
 
     # metodo para asignar 2 cartas de forma aleatoria a cada robot
     def get_random_cards(self):
@@ -294,11 +289,6 @@ class Play:
                 print("The enemy is having a short circuit")
     
                 self.round_name += 1
-    
-            if card_selected == 'poison':
-              enemy_robot.is_poisoned == True
-              print(enemy_robot.print_status())
-              print('the enemy is having a poisoned')
     
             if card_selected == 'invulnerable':
                 current_robot.is_invulnerable = card_selected.hability
