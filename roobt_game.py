@@ -265,69 +265,53 @@ class Play:
         if card_to_use == 7:
             card_selected = current_robot.cards[list_cards[1]]
 
-        if card_selected.name == 'cure':
-            print(current_robot.print_status())
-            print(colors['green'])
-            part_to_cure = int(input('choose the part to cure: '))
+        if card_selected.uses > 0:
+            card_selected.uses -= 1  
 
-            current_robot.parts[part_to_cure].cure(card_selected.hability)
-
-            print(current_robot.parts[part_to_cure].defense_level)
-
-            self.round_name += 1
-
-        if card_selected.name == 'critic_attack':
-            print(enemy_robot.print_status())
-
-            print(colors['yellow'])
-            part_to_affect = int(input('choose a part of enemy to attack: '))
-            enemy_robot.parts[part_to_affect].critic_attack(card_selected.hability)
-
-            self.round_name += 1
-
-        if card_selected.name == 'short_circuit':
-            enemy_robot.is_short_circuit = True
-            print(enemy_robot.print_status())
-            print("The enemy is having a short circuit")
-
-            self.round_name += 1
-
-        if card_selected.name == 'invulnerable':
-            current_robot.is_invulnerable = card_selected.hability
-
-            print(colors['green'])
-            print('you are invulnerable to the next attack')
-            part_to_use = input('choose a number part: ')
-            part_to_use = int(part_to_use)
-            enemy_robot.print_status()
-            print('what part of the enemy should we attack?')
-            part_to_attack = input('choose a part of enemy to attack: ')
-            part_to_attack = int(part_to_attack)
-            current_robot.attack(enemy_robot, part_to_use, part_to_attack)
-
-            current_robot.is_invulnerable = not card_selected.hability
-
-
-            self.round_name += 1
-
-        if card_selected.name == 'turn_jump':
-            print(colors['green'])
-            print('The enemy robot miss his turn')
-            part_to_use = input('choose a number part: ')
-            part_to_use = int(part_to_use)
-            enemy_robot.print_status()
-            print('what part of the enemy should we attack?')
-            part_to_attack = input('choose a part of enemy to attack: ')
-            part_to_attack = int(part_to_attack)
-            current_robot.attack(enemy_robot, part_to_use, part_to_attack)
-
-            self.round_name += 1
-
-        if card_selected.name == 'recover_energy':
-            current_robot.energy += card_selected.hability
-
-            self.round_name += 1
-
+            if card_selected.name == 'cure':
+                print(current_robot.print_status())
+                part_to_cure = int(input('choose the part to cure: '))
+    
+                current_robot.parts[part_to_cure].cure(card_selected.hability)
+    
+                print(current_robot.parts[part_to_cure].defense_level)
+    
+                self.round_name += 1
+    
+            if card_selected.name == 'critic_attack':
+                print(enemy_robot.print_status())
+                part_to_affect = int(input('choose a part of enemy to attack: '))
+                enemy_robot.parts[part_to_affect].critic_attack(card_selected.hability)
+    
+                self.round_name += 1
+    
+            if card_selected.name == 'short_circuit':
+                enemy_robot.is_short_circuit = True
+                print(enemy_robot.print_status())
+                print("The enemy is having a short circuit")
+    
+                self.round_name += 1
+    
+            if card_selected == 'invulnerable':
+                current_robot.is_invulnerable = card_selected.hability
+    
+                self.round_name += 1
+    
+            if card_selected.name == 'turn_jump':
+                print('The enemy robot miss his turn')
+                part_to_use = input('choose a number part: ')
+                part_to_use = int(part_to_use)
+                enemy_robot.print_status()
+                print('what part of the enemy should we attack?')
+                part_to_attack = input('choose a part of enemy to attack: ')
+                part_to_attack = int(part_to_attack)
+                current_robot.attack(enemy_robot, part_to_use, part_to_attack)
+    
+                self.round_name += card_selected.hability
+            
+        else:
+            print("This card can no longer be used.")
+          
 play = Play()
 play.play()
 
