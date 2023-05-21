@@ -61,6 +61,7 @@ class MagicCard:
         self.part_to_attack = None
         self.description = description
 
+
 cards = {
     'cure': MagicCard('cure', 10, 'recover 10 defense points in the chosen part'),  # recupera defensa
     'critic_attack': MagicCard('critic_attack', 30, 'deals 30 damage without spending energy'),  # ataque sin gastar energia
@@ -80,6 +81,7 @@ class Robot:
         self.get_random_cards()
         self.is_short_circuit = False
         self.is_invulnerable = False
+        self.is_poisoned = False
         self.parts = [
             Part('Head', attack_level=5, defense_level=20, energy_consumption=0),
 
@@ -95,7 +97,7 @@ class Robot:
     def greet(self):
         print('HI, mi name is', self.name)
 
-    def amountEnergy(self):
+    def amount_energy(self):
         print('the energy level is:', self.energy)
 
     def is_on(self):
@@ -107,7 +109,7 @@ class Robot:
 
     def is_there_available_parts(self):
         for part in self.parts:
-            if (part.is_available()):
+            if part.is_available():
                 return True
             else:
                 return False
@@ -115,25 +117,24 @@ class Robot:
     def print_status(self):
         print(self.color_code)
         str_robot = robot_art.format(**self.get_part_status())
-        self.list_cards = list(self.cards.keys())  # se crea una lista con las keys de nuestro diccionario para imprimir las cartas seleccionadas en cada robot
-
-        card_1 = self.cards[self.list_cards[0]]
-        card_2 = self.cards[self.list_cards[1]]
 
         self.greet()
-        self.amountEnergy()
+        self.amount_energy()
         print(str_robot)
 
-        print(colors['green'])
-        # hacer que dependiendo de las cartas que tenga el robot se imprima su descripcion
-        print("Cure card: recover 10 of defense level")
-        print("Critic_attack card: 30 damage to the part you choose from a enemy")
-        print("Short_Circuit card: Decreases the enemy's energy by 3 turns")
+    def print_cards_availables(self):
+        list_cards = list(self.cards.keys())
+
+        card_1 = self.cards[list_cards[0]]
+        card_2 = self.cards[list_cards[1]]
 
         print(self.color_code)
-        print('Your cards')
-        print('6: Card', card_1.name)
-        print('7: Card', card_2.name)
+        print('AVAILABLE_CARDS\n')
+        print('| 6:', card_1.name)
+        print('|', card_1.description)
+        print('\n')
+        print('| 7:', card_2.name)
+        print('|', card_2.description)
 
         print(colors['white'])
 
@@ -147,6 +148,9 @@ class Robot:
 
     def short_circuit(self, hability):
         self.energy -= hability
+
+    def poison(self):
+        pass
 
     # metodo para asignar 2 cartas de forma aleatoria a cada robot
     def get_random_cards(self):
@@ -204,19 +208,26 @@ class Play:
             else:
                 current_robot = self.robot_2
                 enemy_robot = self.robot_1
+
             if enemy_robot.is_invulnerable:
                 print(colors['red'])
                 print('the enemy is invulnerable')
 
                 self.round_name += 1
+
             else:
-                if current_robot.is_short_circuit and self.counter < 3:
-                    current_robot.short_circuit(cards['short_circuit'].hability)
-                    self.counter += 1
+                if current_robot.is_short_circuit:
+                    if self.counter < 3:
+                        current_robot.short_circuit(cards['short_circuit'].hability)
+
+                        self.counter += 1
+
                     if self.counter == 2:
+                        print('the short_circuit is over')
                         current_robot.is_short_circuit = False
 
                 current_robot.print_status()
+                current_robot.print_cards_availables()
                 print('choose the part or the card to use')
 
                 part_to_use = input('choose a number part or card: ')
@@ -226,15 +237,14 @@ class Play:
 
                     enemy_robot.print_status()
                     print('what part of the enemy should we attack?')
-                    part_to_attack = input('choose a part of enemy to attack: ')
-                    part_to_attack = int(part_to_attack)
+                    part_to_attack = int(input('choose a part of enemy to attack: '))
 
                     current_robot.attack(enemy_robot, part_to_use, part_to_attack)
 
                     self.round_name += 1
 
 
-                elif 8 > part_to_use > 5:
+                elif part_to_use > 5:
                     self.use_card(current_robot, part_to_use, enemy_robot)
 
                 else:
@@ -281,26 +291,10 @@ class Play:
 
             self.round_name += 1
 
-        if card_selected.name == 'invulnerable':
+        if card_selected == 'invulnerable':
             current_robot.is_invulnerable = card_selected.hability
 
             self.round_name += 1
-
-        if card_selected.name == 'turn_jump':
-            current_robot.print_status()
-            print('The enemy robot miss his turn')
-            part_to_use = input('choose a number part: ')
-            part_to_use = int(part_to_use)
-            enemy_robot.print_status()
-            print('what part of the enemy should we attack?')
-            part_to_attack = input('choose a part of enemy to attack: ')
-            part_to_attack = int(part_to_attack)
-            current_robot.attack(enemy_robot, part_to_use, part_to_attack)
-
-            
-
-            self.round_name += card_selected.hability
-
 
 
 play = Play()
