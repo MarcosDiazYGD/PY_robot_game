@@ -149,7 +149,7 @@ class Robot:
     def short_circuit(self, hability):
         self.energy -= hability
 
-    def poison(self):
+    def poison(self, hability):
         pass
 
     # metodo para asignar 2 cartas de forma aleatoria a cada robot
@@ -291,14 +291,31 @@ class Play:
 
             self.round_name += 1
 
+        if card_selected == 'poison':
+          enemy_robot.is_poisoned == True
+          print(enemy_robot.print_status())
+          print('the enemy is having a poisoned')
+
         if card_selected == 'invulnerable':
             current_robot.is_invulnerable = card_selected.hability
 
             self.round_name += 1
 
+        if card_selected.name == 'turn_jump':
+            print('The enemy robot miss his turn')
+            part_to_use = input('choose a number part: ')
+            part_to_use = int(part_to_use)
+            enemy_robot.print_status()
+            print('what part of the enemy should we attack?')
+            part_to_attack = input('choose a part of enemy to attack: ')
+            part_to_attack = int(part_to_attack)
+            current_robot.attack(enemy_robot, part_to_use, part_to_attack)
+
+            self.round_name += card_selected.hability
 
 play = Play()
 play.play()
 
 # crear las cartas y agregarlas al robot
 #
+
