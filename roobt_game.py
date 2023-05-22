@@ -82,7 +82,7 @@ class Robot:
         self.is_short_circuit = False
         self.is_invulnerable = False
         self.parts = [
-            Part('Head', attack_level=10, defense_level=50, energy_consumption=0),
+            Part('Head', attack_level=10, defense_level=50, energy_consumption=5),
 
             Part('weapon', attack_level=50, defense_level=40, energy_consumption=20),
 
