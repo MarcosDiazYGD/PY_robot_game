@@ -60,7 +60,7 @@ class MagicCard:
         self.hability = hability
         self.part_to_attack = None
         self.description = description
-
+        self.uses = 2 # Por julio este es el numero de usos
 
 cards = {
     'cure': MagicCard('cure', 10, 'recover 10 defense points in the chosen part'),  # recupera defensa
@@ -312,6 +312,7 @@ class Play:
         else:
             print("This card can no longer be used.")
           
+
 play = Play()
 play.play()
 
